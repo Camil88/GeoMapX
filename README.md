@@ -1,3 +1,3 @@
 # geoMapX
 This is spatial app. New version.
-This is another line
+This is another line, and next line
