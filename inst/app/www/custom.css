@@ -1,0 +1,619 @@
+
+.content-wrapper>.content {
+
+  /*position: relative !important;  */
+  padding: 0px 0px !important;
+
+} 
+
+ body {
+   overflow: hidden !important;
+ }
+
+#body_ui-proxyMap-map {
+  
+  height: calc(100vh - 57px) !important; 
+  width: calc(100vw - 73.594px) !important;
+}
+
+.airdatepicker {
+  /*background-color: black; */
+}
+
+/*
+.skin-midnight .sidebar-menu .fa {
+  font-size: medium;
+}
+
+*/
+
+.wrapper {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar {
+  margin-top: 15px;
+}
+
+
+#panelTransits, #panelGPS {
+  margin-top: 15px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0.92;
+  /* width: 370px; tak bylo wczesniej, dla danych z sql*/
+  width: 350px; 
+}
+
+
+#panelDrivers {
+  margin-top: 15px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0.92;
+  /* width: 280px; */
+  width: 410px; 
+}
+
+#body_ui-proxyMap-coordPanel {
+
+  left: 20px;
+  top: calc(100vh - 107px) !important;
+  z-index: 1;
+  text-align: center;  
+}
+
+#body_ui-proxyMap-coordPanel .bttn-unite {
+  font-size: 18px;
+}
+
+
+#header_ui-btnBurger, #header_ui-btnBurger:hover {
+  font-size: medium;
+  background-color: transparent;
+  border-color: transparent;
+  margin-left: 8px;
+  margin-top: 10px;
+  width: 57.58px;
+}
+
+#header_ui-btnBurger:focus {
+  outline: 0;
+}
+
+
+#logo {
+  margin-left: 10px;
+}
+
+
+#body_ui-proxyMap-analysis-analysisPanel {
+  margin-top: 7px;
+  z-index: 1;
+  text-align: center;
+  width: calc(100vw - 50px);
+}
+
+
+#body_ui-proxyMap-optionsBtns-optionsPanel {
+  width: 50px;
+  display: block;
+  right: 20px;
+  top: 75px;
+  z-index: 1;
+  text-align: center;
+  
+}
+
+#body_ui-proxyMap-analysis-analysisPanel .bttn-material-circle, #body_ui-proxyMap-optionsBtns-optionsPanel .bttn-material-circle {
+  padding: 0;
+  text-align: center;
+  margin: 3px;
+  background-color: #343a40;
+  color: #ced4da;
+}
+
+
+#body_ui-proxyMap-analysis-analysisPanel .bttn-material-circle:hover, #body_ui-proxyMap-optionsBtns-optionsPanel .bttn-material-circle:hover {
+  background-color: #0074D9;
+  color: #fff;
+
+}
+
+#body_ui-proxyMap-analysis-analysisPanel .bttn-material-circle {
+  animation-name: fadeInOut;
+  animation-duration: 0.7s;
+} 
+
+
+#body_ui-proxyMap-analysis-controlbar {
+  top: calc(100vh * 0.45) !important; 
+  opacity: 0.92;
+  border-radius: 5px 0 0 5px;
+}
+
+/*
+#body_ui-proxyMap-analysis-quickStats{
+  z-index: 1;
+  opacity: 0.95;
+}
+*/
+
+#body_ui-proxyMap-optionsBtns-optionsPanel > .bttn-material-circle:hover {
+  background-color: #8b27a8;
+}
+
+
+#body_ui-proxyMap-btnCoord1, #body_ui-proxyMap-btnCoord2, #body_ui-proxyMap-btnCoord3 {
+  background-color: #fff;
+  color: #007bff;
+  border-radius: 25px;
+  border: 1px solid #007bff;
+  opacity: 1;
+  
+}
+
+#body_ui-proxyMap-btnCoord1:hover, #body_ui-proxyMap-btnCoord2:hover, #body_ui-proxyMap-btnCoord3:hover {
+  background-color: #007bff;
+  color: #fff;
+  /*border-color: #1161b8; */
+}
+
+
+#datepicker_button {
+  padding-left: 0;
+  padding-right: 0;
+  color: #007bff;
+  font-size: large;
+  height: 38px;
+}
+
+
+#datepicker_button:hover {
+  color: #0074D9;
+}
+
+
+#datepicker{
+  border-radius: 5px;
+  text-align: center;
+  padding-right: 5px;
+  padding-left: 5px;
+} 
+
+
+.nav .nav-treeview, 
+.nav .nav-treeview .form-group {
+  width: 235px;
+}
+
+.nav .nav-treeview .input-group {
+  width: 225px;
+}
+
+.nav .nav-treeview label {
+  font-weight: 100;
+  letter-spacing: 0.8px;
+  margin-left: 23px;
+}
+
+.sidebar-custom {
+  padding: .55rem .5rem !important;
+}
+
+.nav-sidebar .nav-item .fa {
+  text-align: center;
+  width: 57.59px;
+  padding: 12px 0;
+}
+
+.nav-sidebar .nav-item .fa-arrow-circle-right {
+  padding: 0;
+  width: 45px;
+}
+
+/*
+.nav-sidebar .nav-item .fa-circle {
+  color: #cf1313;
+  font-size: small !important;
+  padding: 14.5px 0;
+}
+
+.nav-sidebar .nav-item .fa-arrow-circle-right {
+  width: 31px;
+  padding: 0;
+}
+
+*/
+
+
+
+.nav-pills .nav-link {
+  padding: 8px 0px;
+  padding: 0;
+  height: 40px;
+  font-size: 18px;
+} 
+
+.mapboxgl-ctrl-logo {
+  display: none !important;
+}
+
+
+
+/*.navbar-nav .nav-item {
+  font-size: 17.5px;
+} */
+
+
+.leaflet-tooltip-right:before {
+  border-right-color: #343a40 !important;
+}
+
+.leaflet-tooltip-left:before {
+  border-left-color: #343a40 !important;
+}
+
+
+.search-input {
+  color: #343a40 !important;
+  font-size: 13px !important;
+  border: none !important;
+  padding: 0 0 0 5px !important;
+  margin: 5px 0 5px 0 !important;
+
+}
+
+.search-input:focus {
+  outline: none !important;
+
+}
+
+.search-input:focus::placeholder {
+  color: transparent !important;
+
+}
+
+.search-cancel {
+  right: 0 !important;
+  top: 1px !important;
+
+}
+
+
+.leaflet-draw.leaflet-control {
+  visibility: hidden;
+  position: absolute;
+
+}  
+
+
+.leaflet-draw-tooltip {
+  display: none;
+}
+
+
+
+.leaflet-top.leaflet-left {
+  right: 75px !important;
+  left: unset !important;
+  top: 16px;
+}
+
+.leaflet-control-search .search-tip {
+  color: #007bff !important;
+  padding: 3px 0 3px 5px !important;
+  margin: 1px 0 1px 0 !important;
+  font-size: 13px !important;
+  white-space: normal !important;
+  
+}
+
+.leaflet-control-search .search-tooltip {
+  max-height: 290px !important;
+}
+
+.leaflet-control-layers {
+  right: 60px;
+  top: 70px;
+  background-color: #454d55;
+  opacity: 0.95;
+  color: white;
+  box-shadow: 0 1px 7px rgb(0 0 0 / 65%) !important;
+  border: none !important;
+}
+
+
+#body_ui-proxyMap-boxTable-tableTransits {
+  overflow-x: hidden;
+}
+
+#body_ui-proxyMap-boxTable-tableDrivers {
+  overflow-x: hidden;
+}
+
+#body_ui-proxyMap-boxTable-tableTransits .rt-thead {
+  display: none !important;
+}
+
+#body_ui-proxyMap-boxTable-tableDrivers .rt-thead {
+  display: none !important;
+}
+
+
+#body_ui-proxyMap-boxTable-tableTransits .rt-search, #body_ui-proxyMap-boxTable-tableDrivers .rt-search {
+  align-self: start;
+  transition: border-color 0.5s;
+}
+
+#body_ui-dashboard-tableAllData .rt-search {
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#body_ui-dashboard-tableAllData {
+  height: calc(100vh * 0.45) !important;
+}
+
+
+#body_ui-dashboard-tableAllData .ReactTable {
+  border-radius: 5px;;
+}
+
+.rt-search:focus {
+  border-color: #0074D9;
+  transition: border-color 0.5s;
+}
+
+.rt-search:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+/*
+.card {
+  background-color: none;
+  box-shadow: none;
+}
+*/
+
+/*
+@keyframes fadeInOut {
+  from {opacity: 0;}
+  to {opacity: 100;} 
+}
+
+*/
+
+
+/*
+.datepicker {
+  top: 460px !important;
+}
+*/
+
+
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #343a40; 
+  opacity: 0.9;
+}
+ 
+
+::-webkit-scrollbar-thumb {
+  background: #797a80; 
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9d9fa6;
+  border-radius: 10px;
+}
+
+/*
+.rt-td.rt-td-select.rt-align-left {
+    display: none !important;
+}  */
+
+
+
+
+
+
+/* ten caly nizej zakomentowany kod dotyczy ikonki, ktora dodalem js-em do boxow, byla to ikona zaznaczania obszaru na mapie
+
+#body_ui-proxyMap-boxTable-btnDrawAreaTransits {
+  color: #adb5bd;
+  font-size: .95rem;
+  border: none;
+  background: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 0;
+}
+
+#body_ui-proxyMap-boxTable-btnDrawAreaTransits .fa-times {
+  color: #e81e1e;
+  font-size: 1rem;
+}
+
+#body_ui-proxyMap-boxTable-btnDrawAreaTransits:hover {
+  color: #495057;
+}
+
+#body_ui-proxyMap-boxTable-btnDrawAreaTransits .fa-times:hover {
+  color: #c20e0e;
+}
+
+#body_ui-proxyMap-boxTable-btnDrawAreaDrivers {
+  color: #adb5bd;
+  font-size: .95rem;
+  border: none;
+  background: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 0;
+}
+
+
+#body_ui-proxyMap-boxTable-btnDrawAreaDrivers .fa-times {
+  color: #e81e1e;
+  font-size: 1rem;
+}
+
+#body_ui-proxyMap-boxTable-btnDrawAreaDrivers:hover {
+  color: #495057;
+}
+
+
+#body_ui-proxyMap-boxTable-btnDrawAreaDrivers .fa-times:hover {
+  color: #c20e0e;
+}
+
+
+*/
+
+
+
+
+
+#body_ui-proxyMap-boxTable-tableTransits .rt-tr-group > .rt-tr-group .rt-td-select.rt-align-left {
+  display: none !important;
+}
+
+
+#body_ui-proxyMap-boxTable-tableDrivers .rt-tr-group > .rt-tr-group .rt-td-select.rt-align-left {
+  display: none !important;
+}
+
+
+#body_ui-proxyMap-analysis-tableStats .rt-align-center.rt-th:first-child{
+  padding-top: 12px;
+}
+
+
+
+#body_ui-proxyMap-analysis-tableStats {
+  display: flex;
+  justify-content: center;
+}
+
+.delivery {
+  border: 1px solid #20B2AA;
+  border-radius: 3px;
+  padding-left: 3px;
+  padding-right: 3px;
+  color: #20B2AA;
+  font-weight: 400;
+  font-size: 13px;
+  margin-right: 25px;
+}
+
+.pickup {
+  border: 1px solid #DC143C;
+  border-radius: 3px;
+  padding-left: 3px;
+  padding-right: 3px;
+  color: #DC143C;
+  font-weight: 400;
+  font-size: 13px;
+  margin-right: 25px;
+}
+
+
+input[type="checkbox"] {
+  border: none;
+  background-color: black;
+}
+
+/* to ew. odkomentowac, bez tego nie widac pagination w tabeli w dashboard
+.pagination-bottom {
+  display: none;
+} */
+
+.makeViolet {
+  background-color: #75238c !important;
+  color: #fff !important;
+}
+
+.makeBlue {
+  background-color: #1161b8 !important;
+  color: #fff !important;
+  border-color: #1161b8 !important;
+}
+
+/*
+.styleRefreshButton {
+  background-color: transparent !important;
+  border: none;
+  box-shadow: none !important;
+} */
+
+
+/*
+.styleRefreshButtonToggleColor{
+  color: #20a140 !important;
+}
+*/
+
+
+
+#sidebar_ui-refresh {
+  background-color: transparent !important;
+  border: none;
+  box-shadow: none !important;  
+  color: #22b573;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  margin: 6px 0 12px 13px;
+}
+
+#sidebar_ui-refresh :hover {
+  color: #0fd485 !important;
+}
+
+/* active podowduje ze klikajac w button zmienia swoj kolor */
+#sidebar_ui-refresh :active {
+  color: #22b573 !important;
+}
+
+
+/*#chart1, */
+#chart2, #chart3 {
+  height: calc(100vh * 0.45);
+  margin-top: 10px;
+}
+
+
+#performanceDivisions {
+  margin-top: 10px;
+}
+
+
+
+.ReactTable .rt-table {
+  overflow-x: hidden;
+  border-radius: 5px;
+}
+
+/*
+.nav-sidebar .nav-item .fa-sync-alt {
+  color: #20a140;
+}
+
+.nav-sidebar .nav-item .fa-sync-alt:hover {
+  color: #23c24a;
+}
+
+*/
+
+
+
+
