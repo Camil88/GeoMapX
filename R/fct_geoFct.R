@@ -1,5 +1,5 @@
 
-# CREATE POINTs FOR DATA SUBSETS
+# CREATE POINTS FOR DATA SUBSETS
 
 coordCustomers <- function(data, type) {
 
