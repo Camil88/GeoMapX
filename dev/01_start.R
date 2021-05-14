@@ -17,9 +17,9 @@ golem::fill_desc(
   pkg_name = "GeoMapX", # The Name of the package containing the App 
   pkg_title = "geomapx", # The Title of the package containing the App 
   pkg_description = "Spatial analysis on the map", # The Description of the package containing the App 
-  author_first_name = "Kamil", # Your First Name
-  author_last_name = "Glowka", # Your Last Name
-  author_email = "kglowka@hellmann.com", # Your Email
+  author_first_name = "Camill", # Your First Name
+  author_last_name = "Head", # Your Last Name
+  author_email = "dummy@dummy.com", # Your Email
   repo_url = NULL # The URL of the GitHub Repo (optional) 
 )     
 
@@ -28,7 +28,7 @@ golem::set_golem_options()
 
 ## Create Common Files ----
 ## See ?usethis for more information
-usethis::use_mit_license( name = "Kamil User" )  # You can set another license here
+usethis::use_mit_license( name = "Camill User" )  # You can set another license here
 usethis::use_readme_rmd( open = FALSE )
 usethis::use_code_of_conduct()
 usethis::use_lifecycle_badge( "Experimental" )

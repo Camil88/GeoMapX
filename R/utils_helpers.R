@@ -1,5 +1,5 @@
 
-# labels for points on a map
+# points tooltip
 
 createLabel <- function(data) {
   

@@ -1,16 +1,5 @@
 
-# FUNCTIONS FOR SPATIAL/GENERAL ANALYSES
-
-# Count Orders
-# countOrders <- function(data, colName) {
-#   
-#   result <- data %>%
-#     dplyr::select(colName) %>% 
-#     dplyr::summarise(count = dplyr::n()) %>% 
-#     sf::st_drop_geometry()
-#   
-#   return(result)
-# }
+# FUNCTIONS FOR USE IN DASHBOARD/CONTROLBAR ANALYSES
 
 
 # stats used in a table (controlbar)
@@ -30,8 +19,6 @@ tableStats <- function(data, colName1, colName2, colName3, colName4, colName5) {
 }
 
 
-
-
 # stats used in charts (controlbar)
 chartStats <- function(data, colName1, colName2, colName3) {
   
@@ -46,75 +33,123 @@ chartStats <- function(data, colName1, colName2, colName3) {
   return(result)
 }
 
-# stats used in charts (dashboard)
 
 
-# stats used in charts (controlbar)
-chartStatsBest <- function(data, colName1, colName2) {
+# stats used in dashboard mod
+chartStatsBestDriver <- function(data, colName1, colName2) {
   
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]]) %>%
     dplyr::summarise(count = dplyr::n()) %>% 
-    dplyr::group_by(.data[[colName1]]) %>%
-    dplyr::summarise("Orders" = sum(count),
-                     "sumAllOrders" = sum(.data[[colName2]])) %>%
-    dplyr::mutate(ratio = scales::percent(Orders/sumAllOrders, accuracy = 0.1)) %>% 
-    dplyr::arrange(desc(sumAllOrders)) %>% 
+    dplyr::summarise(sumAllOrders = sum(countAllOrders),
+                     Orders = sum(count)) %>% 
+    dplyr::mutate(ratioPure = Orders/sumAllOrders,
+                  ratio = scales::percent(Orders/sumAllOrders, accuracy = 0.1)) %>% 
+    dplyr::filter(ratioPure <= 1) %>% 
+    dplyr::arrange(desc(ratioPure)) %>% 
     dplyr::slice(1)
   
   return(result)
 }
 
-# chartStatsBest(data_app, "driverName", "statusGreater1km" )
-# sapply(data_app, typeof)
 
-# stats used in charts (controlbar)
-chartStatsWorst <- function(data, colName1, colName2) {
+# stats used in dashboard mod
+chartStatsWorstDriver <- function(data, colName1, colName2) {
   
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]]) %>%
     dplyr::summarise(count = dplyr::n()) %>% 
+    dplyr::summarise(sumAllOrders = sum(countAllOrders),
+                     Orders = sum(count)) %>% 
+    dplyr::mutate(ratioPure = Orders/sumAllOrders,
+                  ratio = scales::percent(Orders/sumAllOrders, accuracy = 0.1)) %>% 
+    dplyr::filter(ratioPure <= 1) %>% 
+    dplyr::arrange(ratioPure) %>% 
+    dplyr::slice(1)
+
+  return(result)
+}
+
+
+# stats used in dashboard mod
+chartStatsBestDivision <- function(data, colName1, colName2, colName3) {
+  
+  result <- data %>%
+    sf::st_drop_geometry() %>%
+    dplyr::group_by(.data[[colName1]], .data[[colName2]], .data[[colName3]]) %>%
+    dplyr::summarise(count = dplyr::n()) %>% 
+    dplyr::summarise(sumAllOrders0 = sum(countAllOrders),
+                     Orders0 = sum(count)) %>% 
     dplyr::group_by(.data[[colName1]]) %>% 
-    dplyr::summarise("Orders" = sum(count),
-                     "sumAllOrders" = sum(.data[[colName2]])) %>% 
-    dplyr::mutate(ratio = scales::percent(Orders/sumAllOrders, accuracy = 0.1)) %>% 
-    dplyr::arrange(ratio) %>% 
+    dplyr::summarise(sumAllOrders = sum(sumAllOrders0),
+                     Orders = sum(Orders0)) %>% 
+    dplyr::mutate(ratioPure = Orders/sumAllOrders,
+                  ratio = scales::percent(Orders/sumAllOrders, accuracy = 0.1)) %>% 
+    dplyr::filter(ratioPure <= 1) %>% 
+    dplyr::arrange(desc(ratioPure)) %>% 
     dplyr::slice(1)
-
+  
   return(result)
 }
 
-#chartStatsBest(dataSQL,"driverName", "countAllOrders"  )
 
-# stats used in charts (controlbar)
-statsKmWorst <- function(data, colName1, colName2) {
+# stats used in dashboard mod
+chartStatsWorstDivision <- function(data, colName1, colName2, colName3) {
   
   result <- data %>%
     sf::st_drop_geometry() %>%
-    dplyr::select(.data[[colName1]], .data[[colName2]]) %>% 
-    dplyr::arrange(desc(.data[[colName2]])) %>% 
+    dplyr::group_by(.data[[colName1]], .data[[colName2]], .data[[colName3]]) %>%
+    dplyr::summarise(count = dplyr::n()) %>% 
+    dplyr::summarise(sumAllOrders0 = sum(countAllOrders),
+                     Orders0 = sum(count)) %>% 
+    dplyr::group_by(.data[[colName1]]) %>% 
+    dplyr::summarise(sumAllOrders = sum(sumAllOrders0),
+                     Orders = sum(Orders0)) %>% 
+    dplyr::mutate(ratioPure = Orders/sumAllOrders,
+                  ratio = scales::percent(Orders/sumAllOrders, accuracy = 0.1)) %>% 
+    dplyr::filter(ratioPure <= 1) %>% 
+    dplyr::arrange(ratioPure) %>% 
     dplyr::slice(1)
   
   return(result)
 }
 
-#statsKmWorst(dataSQL,"DivisionCity", "distanceKm")
 
-# stats used in charts (controlbar)
+# stats used in dashboard mod
 statsKmBest <- function(data, colName1, colName2) {
   
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::select(.data[[colName1]], .data[[colName2]]) %>% 
+    dplyr::group_by(.data[[colName1]]) %>% 
+    dplyr::slice_max(order_by = .data[[colName2]], n = 1) %>% 
+    unique() %>% 
     dplyr::arrange(.data[[colName2]]) %>% 
-    dplyr::slice(1)
+    head(1)
   
   return(result)
 }
 
-#statsKmBest(dataSQL,"DivisionCity", "distanceKm")
-#chartStatsWorst(dataSQL, "DivisionCity", "countAllOrders" )
-#tableStats(dataSQL, "DivisionCity","countAllOrders","statusGreater30min","statusSerialSet", "statusGreater1km")
+
+# stats used in dashboard mod
+statsKmWorst <- function(data, colName1, colName2) {
+  
+  result <- data %>%
+    sf::st_drop_geometry() %>%
+    dplyr::select(.data[[colName1]], .data[[colName2]]) %>% 
+    dplyr::group_by(.data[[colName1]]) %>% 
+    dplyr::slice_max(order_by = .data[[colName2]], n = 1) %>% 
+    unique() %>% 
+    dplyr::arrange(desc(.data[[colName2]])) %>% 
+    head(1)
+  
+  return(result)
+}
+
+
+
+
+
 

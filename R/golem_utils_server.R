@@ -18,7 +18,7 @@ not_na <- Negate(is.na)
 #' @example 
 #' drop_nulls(list(1, NULL, 2))
 drop_nulls <- function(x){
-  x[!sapply(x, is.null)] 
+  x[!sapply(x, is.null)]
 }
 
 #' If x is `NULL`, return y, otherwise return x

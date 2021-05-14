@@ -14,17 +14,14 @@ mod_dashboard_ui <- function(id){
   bs4Dash::tabItems(
     bs4Dash::tabItem(
       tabName = "dashboard",
-      
       fluidRow(
         column(
           width = 4,
-          
-          
           bs4Dash::box(
             id = "performanceDivisions",
             closable = FALSE,
             collapsible = FALSE,
-            title = tags$strong("Divisions performance - statues set vs. all orders"),
+            title = tags$span(style="font-weight:300","Divisions performance - statues set vs. all orders"),
             background = NULL,
             width = 12,
             status = "success",
@@ -40,8 +37,8 @@ mod_dashboard_ui <- function(id){
                   rightBorder = TRUE,
                   marginBottom = FALSE
                 )
-         
             ),
+            
               column(
                 width = 6,
                 bs4Dash::descriptionBlock(
@@ -56,10 +53,6 @@ mod_dashboard_ui <- function(id){
               )
             )
           ),
-          
-          
-   
-          
           
           bs4Dash::infoBox(
             tabName = "divisionKmShortest",
@@ -78,16 +71,12 @@ mod_dashboard_ui <- function(id){
             color = "danger",
             icon = icon("route")
           )
-          
-
-
-      
-          
         ),
+        
         column(
           width = 4, 
           bs4Dash::box(
-            title = tags$strong("Number of statuses set per division"),
+            title = tags$span(style="font-weight:300","Number of statuses set per division"),
             id = "chart2",
             status = "maroon",
             width = 12,
@@ -100,7 +89,7 @@ mod_dashboard_ui <- function(id){
         column(
           width = 4, 
           bs4Dash::box(
-            title = tags$strong("Number of orders in 30 min intervals"),
+            title = tags$span(style="font-weight:300","Number of orders in 30 min intervals"),
             id = "chart3",
             width = 12,
             closable = FALSE,
@@ -111,17 +100,13 @@ mod_dashboard_ui <- function(id){
         )        
       ),
      
-  
       fluidRow(
         column(
           width = 4,
-          
-          
-          
           bs4Dash::box(
             closable = FALSE,
             collapsible = FALSE,
-            title = "Drivers performance - statues set vs. all orders",
+            title = tags$span(style="font-weight:300","Drivers performance - statues set vs. all orders"),
             background = NULL,
             width = 12,
             status = "success",
@@ -138,6 +123,7 @@ mod_dashboard_ui <- function(id){
                   marginBottom = FALSE
                 )
               ),
+              
               column(
                 width = 6,
                 bs4Dash::descriptionBlock(
@@ -152,7 +138,6 @@ mod_dashboard_ui <- function(id){
               )
             )
           ),
-          
           
           bs4Dash::infoBox(
             tabName = "driverKmShortest",
@@ -171,12 +156,8 @@ mod_dashboard_ui <- function(id){
             color = "danger",
             icon = icon("route")
           )
-  
-          
-          
-       
-          
         ),
+        
         column(
           width = 8, 
           reactable::reactableOutput(ns("tableAllData"))
@@ -199,45 +180,31 @@ mod_dashboard_server <- function(id, data)
     function(input, output, session) {
       ns <- NS(id)
       
-      
+      # datasets for use in various statistics
       dataStats <- colTable(data, c(1:15))
       
       dataPlot1 <- chartStats(dataStats, "DivisionCity","orderNr", "countAllOrders")      
       dataPlot2 <- chartStats(dataStats, "driverName","statusGreater30min", "statusSerialSet")
       dataPlot3 <- chartStats(dataStats, "statusHrsMin","transitNr", "countAllOrders")
 
-  
-      
-      
       dataTableAllData <- dataStats %>% 
         dplyr::select("DivisionCity", "driverName", "transitNr","orderNr","transitTypeShort","customerName","Status", 
                       "statusDateTime", "distanceKm", "statusGreater30min", "statusGreater1km", "statusSerialSet")
       
-      bestDriver <- chartStatsBest(dataStats, "driverName", "countAllOrders" )
-      bestDivision <- chartStatsBest(dataStats, "DivisionCity", "countAllOrders" )
+      bestDriver <- chartStatsBestDriver(dataStats, "driverName", "countAllOrders" )
+      bestDivision <- chartStatsBestDivision(dataStats, "DivisionCity", "driverName", "countAllOrders" )
       
-      worstDriver <- chartStatsWorst(dataStats, "driverName", "countAllOrders" )
-      worstDivision <- chartStatsWorst(dataStats, "DivisionCity", "countAllOrders" )
+      worstDriver <- chartStatsWorstDriver(dataStats, "driverName", "countAllOrders" )
+      worstDivision <- chartStatsWorstDivision(dataStats, "DivisionCity", "driverName", "countAllOrders" )
       
-      bestDriverKm <- statsKmBest(dataStats, "driverName", "distanceKm" )
+      bestDriverKm <- statsKmBest(dataStats, "driverName", "distanceKm")
       bestDivisionKm <- statsKmBest(dataStats, "DivisionCity", "distanceKm" )
       
       worstDriverKm <- statsKmWorst(dataStats, "driverName", "distanceKm" )
       worstDivisionKm <- statsKmWorst(dataStats, "DivisionCity", "distanceKm" )      
       
-      
-          
-  #     echarts_dark_theme <- list(
-  #       options = '{
-  #   "color":["#6610f2", "#ffc107", "#e83e8c", "#ff851b", "#17a2b8", "#3d9970"],
-  #   "backgroundColor": "#343a40",
-  #   "textStyle": {
-  #       color: "#fff"
-  #   }
-  # }')
-  #     
-      
-      
+
+      # outputs - panels with statistics
       output$bestDivisionRatio <- renderText(
         bestDivision$ratio
       )
@@ -250,7 +217,6 @@ mod_dashboard_server <- function(id, data)
         bestDivision$DivisionCity
       )
       
-      
       output$worstDivisionRatio <- renderText(
         worstDivision$ratio
       )
@@ -262,8 +228,6 @@ mod_dashboard_server <- function(id, data)
       output$worstDivisionName <- renderText(
         worstDivision$DivisionCity
       )      
-      
-      
       
       
       output$bestDriverRatio <- renderText(
@@ -291,12 +255,7 @@ mod_dashboard_server <- function(id, data)
         worstDriver$driverName
       )        
       
-  
-      
-      
  
-      
-      
       output$bestDriverKm <- renderText(
         paste("<font color=\"#28a745\"><b>", bestDriverKm$distanceKm," km   ","</b></font>",bestDriverKm$driverName)
       )
@@ -313,42 +272,16 @@ mod_dashboard_server <- function(id, data)
         paste("<font color=\"#dc3545\"><b>", worstDivisionKm$distanceKm, " km ", "</b></font>",worstDivisionKm$DivisionCity)
       )
       
-      
-
-           
-          
+    
       output$plot2 <- echarts4r::renderEcharts4r({
         
-        # chart_xAxis <- chartXAxisStats(buttonNumber$number)
-        # chart_type <- chartTypeStats(buttonNumber$number)
-        # chart_title <- chartTitleStats(buttonNumber$number)
-        # chart_color <- chartColorStats(buttonNumber$number)
-        # chart_label <- chartLabelShowStats(buttonNumber$number)
-        
-        #dataChart1 %>% 
         dataPlot1 %>% 
           echarts4r::e_charts(DivisionCity) %>% 
           echarts4r::e_pie(Orders, radius = c("45%", "80%")) %>% 
-          # echarts4r::e_title("Statuses set by Division",
-          #                    textStyle = list(
-          #                      #color = chart_color,
-          #                      fontWeight = 600,
-          #                      fontSize = 14)
-          #                    #right = 108,
-          #                    #top = 5
-          #                    ) %>%
           echarts4r::e_legend(show = FALSE) %>% 
           echarts4r::e_show_loading(hide_overlay = FALSE, mask_color = '#343a40') %>% 
-          #echarts4r::e_grid(bottom = 35) %>% 
           echarts4r::e_color(background = "#343a40") %>% 
-          #echarts4r::e_x_axis(axisLabel = list(show = chart_label)) %>% 
-          #echarts4r::e_text_style(color = "red", 
-                                  #fontWeight=200) %>% 
-          #echarts4r::e_x_axis(axisLabel = list(color = '#343a40')) %>% 
-          #echarts4r::e_theme_custom('{"textStyle": {"color": "#ff715e"}}') %>% 
           echarts4r::e_theme("dark-mushroom") %>% 
-          #echarts4r::e_grid(height = "35%") %>% 
-          #echarts4r::e_theme_custom('{"textStyle":{color: "#fff"}}') %>% 
           echarts4r::e_tooltip(
             trigger = "item",
             formatter = echarts4r::e_tooltip_pie_formatter(
@@ -365,11 +298,8 @@ mod_dashboard_server <- function(id, data)
           echarts4r::e_charts(statusHrsMin) %>% 
           echarts4r::e_area(Orders) %>% 
           echarts4r::e_show_loading(hide_overlay = FALSE, mask_color = '#343a40') %>% 
-          #echarts4r::e_grid(bottom = 35) %>% 
           echarts4r::e_color("#2653ad") %>% 
           echarts4r::e_legend(show = FALSE) %>% 
-          #echarts4r::e_x_axis(axisLabel = list(show = chart_label)) %>% 
-          #echarts4r::e_text_style(color = "red") %>% 
           echarts4r::e_grid(height = "60%") %>% 
           echarts4r::e_tooltip(
             trigger = "axis"
@@ -378,18 +308,14 @@ mod_dashboard_server <- function(id, data)
       })      
   
       
-      
       output$plot4 <- echarts4r::renderEcharts4r({
         
         dataPlot4 %>% 
           echarts4r::e_charts(statusHrsMin) %>% 
           echarts4r::e_area(Orders) %>% 
           echarts4r::e_show_loading(hide_overlay = FALSE, mask_color = '#343a40') %>% 
-          #echarts4r::e_grid(bottom = 35) %>% 
           echarts4r::e_color("#2653ad") %>% 
           echarts4r::e_legend(show = FALSE) %>% 
-          #echarts4r::e_x_axis(axisLabel = list(show = chart_label)) %>% 
-          #echarts4r::e_text_style(color = "red") %>% 
           echarts4r::e_grid(height = "60%") %>% 
           echarts4r::e_tooltip(
             trigger = "axis"
@@ -398,24 +324,13 @@ mod_dashboard_server <- function(id, data)
       })      
       
       
-          
-      
       output$tableAllData <- reactable::renderReactable({
         reactable::reactable(
           data = dataTableAllData,
-          #reactiveDf(),
           searchable = TRUE,
           pagination = TRUE,
           highlight = TRUE,
           compact = TRUE,
-          #height = 415,
-          
-          #height = 400,
-          #width = 330,
-          #selection = "multiple", 
-          #onClick = "select",
-          #groupBy = "ZLP",
-          
           columns = list(
             DivisionCity = reactable::colDef(name = "Division", align = "center", width = 70),
             driverName = reactable::colDef(name = "Driver", align = "center", width = 170),
@@ -439,10 +354,7 @@ mod_dashboard_server <- function(id, data)
             statusGreater1km = reactable::colDef(name = "> 1 km",align = "center", width = 70),
             statusSerialSet = reactable::colDef(name = "Serial set",align = "center", width = 70),
             geometry = reactable::colDef(show = FALSE)
-            
           ),
-          
-          
           
           theme = reactable::reactableTheme(
             color = "#f2f2f2",
@@ -452,27 +364,19 @@ mod_dashboard_server <- function(id, data)
             borderWidth = "1px",
             searchInputStyle = list(width = "15%",backgroundColor = "#292828", border = "1px solid #383838"),
             headerStyle = list(
-              #fontSize = "13px",
               letterSpacing = "1px",
               color = "#b3b3b3",
               fontWeight = 400,
               textTransform = "uppercase"
             ),
             paginationStyle = list(color = "#b3b3b3"),
-            #pageButtonHoverStyle = list(backgroundColor = "hsl(0, 0%, 20%)"),
-            #pageButtonActiveStyle = list(backgroundColor = "hsl(0, 0%, 24%)"),
             style = list(
-              #fontFamily = "Work Sans, Helvetica Neue, Helvetica, Arial, sans-serif",
               fontSize = "12px"
               )
-            #rowSelectedStyle = list(backgroundColor = "#283a4d", boxShadow = "inset 2px 0 0 0 #ffa62d"),
-            #rowHighlightStyle = list(width = "370px")
           )         
-          
         )
       })     
       
- 
     }
 )
 

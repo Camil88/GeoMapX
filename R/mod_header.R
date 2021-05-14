@@ -18,50 +18,63 @@ mod_header_ui <- function(id){
     
     rightUi =  tagList(
       bs4Dash::dropdownMenu(
+        headerText = tags$span(style="color:#007bff", "Entering Customer GPS area by driver"),
         type = "notifications",
         badgeStatus = "danger",
         icon = icon("bell"),
-        bs4Dash::notificationItem(icon = icon("bell"),
+        bs4Dash::notificationItem(icon = icon("draw-polygon"),
                                   status = "info",
-                                  "Dojechaem na miejsce, nie ma nikogo"
+                                  "Julius Craig entered Customer_234"
         ),
         
-        bs4Dash::notificationItem(icon = icon("warning"), 
-                                  status = "danger",
-                                  "Korek, stoje")
-        
+        bs4Dash::notificationItem(icon = icon("draw-polygon"),
+                                   status = "info",
+                                  "Adrian Baker entered Customer_22"
         ),
-      
+        
+        bs4Dash::notificationItem(icon = icon("draw-polygon"),
+                                  status = "info",
+                                  "John Cain entered Customer_119"
+        ),
+        
+        bs4Dash::notificationItem(icon = icon("draw-polygon"),
+                                  status = "info",
+                                  "Nick Carr entered Customer_38"
+        )),         
+
         bs4Dash::dropdownMenu(
           type = "messages",
-          badgeStatus = "warning",
-          icon = icon("envelope"),
-          bs4Dash::messageItem("Legal",
-                               "Mail do dzialu prawnego",
-                               time = "15 mins"),
-          bs4Dash::messageItem("Drobnica",
-                               "Wyniki w ekierowcy",
-                               time = "5 mins")
-          
+          badgeStatus = "danger",
+          icon = icon("comments"),
+          bs4Dash::messageItem("Message from driver Adrian Baker",
+                               "Customer closed",
+                                time = "5 mins ago"),
+          bs4Dash::messageItem("Message from driver Louis Plitz",
+                               "Huge traffic, I'll be late",
+                                time = "8 mins ago"),
+          bs4Dash::messageItem("Message from driver George Hill",
+                               "Lack of 4 pallets..",
+                               time = "15 mins ago"),
+          bs4Dash::messageItem("Message from driver Tony Parks",
+                               "Need tel. no. to John!",
+                               time = "45 mins ago"),
+          bs4Dash::messageItem("Message from driver Adam Jones",
+                               "Which gate to drive through?",
+                               time = "1 hr 22 mins ago"),
+          bs4Dash::messageItem("Message from driver Allen Barton",
+                               "Customer closed, not responding",
+                               time = "1 hr 38 mins ago")
+      
           ),
-        
-        bs4Dash::dropdownMenu(
-          type = "tasks",
-          badgeStatus = "success",
-          
-          bs4Dash::taskItem(value = 20, color = "navy",
-                            "Refactor code"),
-          
-          bs4Dash::taskItem(value = 60, color = "fuchsia",
-                            "Create documentation")
-          
-          )
+
+        bs4Dash::userOutput(ns("user"))
+    
       )    
     )
 
-
 }
     
+
 #' header Server Function
 #'
 #' @noRd 
@@ -74,13 +87,15 @@ mod_header_server <- function(id){
         shinyjs::toggleClass(class = "sidebar-collapse", selector = "body")
       })
       
+      output$user <- bs4Dash::renderUser({
+        bs4Dash::dashboardUser(
+          image = "www/capitals.png",
+          title = "Camill Head",
+          subtitle = "welcome to the app!"
+        )
+      })
+
     })
 }
 
-    
-## To be copied in the UI
-# mod_header_ui("header_ui_1")
-    
-## To be copied in the server
-# callModule(mod_header_server, "header_ui_1")
- 
+

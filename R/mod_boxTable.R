@@ -17,10 +17,8 @@ mod_boxTable_ui <- function(id){
                        bs4Dash::box(
                          title = "Transits & Orders",
                          id = "panelTransits",
-                         #width = 4,
                          height = 450,
                          collapsible = TRUE,
-                         #actionButton(inputId = ns("btnDrawAreaTransits"), label = NULL, icon = icon("vector-square")), # bylo border-style
                          reactable::reactableOutput(ns("tableTransits"))
                        )
       ),
@@ -29,35 +27,23 @@ mod_boxTable_ui <- function(id){
                        bs4Dash::box(
                          title = "Drivers",
                          id = "panelDrivers",
-                         #width = 5,
                          height = 450,
                          collapsible = TRUE,
-                         #actionButton(inputId = ns("btnDrawAreaDrivers"), label = NULL, icon = icon("vector-square")),
                          reactable::reactableOutput(ns("tableDrivers"))
                        )
       ),      
       
-      bs4Dash::tabItem(tabName = "areasGPS",
+      bs4Dash::tabItem(tabName = "reports",
                        bs4Dash::box(
-                         title = "GPS areas",
-                         id = "panelGPS",
+                         title = "Reports",
+                         id = "panelReports",
                          #width = 4,
-                         height = 450,
-                         collapsible = TRUE
+                         height = 120,
+                         collapsible = FALSE,
+                         downloadButton(ns("downloadExcel"), icon = icon("file-export"), "Generate .xlsx report")
                        )
-      )#,
+      )      
       
-      # bs4Dash::tabItem(tabName = "points",
-      #                  bs4Dash::box(
-      #                    title = "Points on the map",
-      #                    #id = "leftPanel",
-      #                    #width = 4,
-      #                    height = 450,
-      #                    collapsible = TRUE
-      #                  )
-      # )#,
-      
-
     )
     
   )
@@ -65,7 +51,7 @@ mod_boxTable_ui <- function(id){
 
 
 #' @noRd 
-mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapInputShape, parentSession, btnDrawRectangle, btnDrawChoro){
+mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapInputShape, parentSession, btnDrawRectangle, btnDrawChoro, btnDrawHeatMap){
   moduleServer(
     id,
     function(input, output, session) {
@@ -82,32 +68,20 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
       prevSelectedDrivers <- reactiveVal()
       visibilityDraw <- reactiveValues(showHide = FALSE)
       
-      
-      ###### te 2 ponizsze dotycza buttonow przekazanych z mod_mapAnalaysis
+      ################## reactives for buttons passed from mod_mapAnalaysis
       
       visibilityDrawRectangle <- reactiveValues(showHide = FALSE)
       visibilityDrawChoro <- reactiveValues(showHide = FALSE)
       
       ##################
       
-    
-      dataTableTransits <- colTable(data, c(1,2,4,6))
-      #dataTableDrivers <- colTable(data, c(2,3,4,6))      
-      dataTableDrivers <- colTable(data, c(2,3,4,6,13))      
-      allData <- colTable(data, c(1:6))
-      #dataStats <- colTable(data, c(1:3,8:10,12,14)) # wczesniej uzywalem tu dataStats zamiast allData i dzialalo jakby co
-      
-      # te 2 ponizsze dzialaja razem - najpierw reactiveVal, potem do niego przekazujemy passedMapInput, do ktorego z poziomu btnDrawArea1
-      # przekazujemy NULL przy klikniciu
       polygon_coords <- reactiveVal()
       choro_coords <- reactiveVal()
-
+    
+      dataTableTransits <- colTable(data, c(1,2,4,6))
+      dataTableDrivers <- colTable(data, c(2,3,4,6,13))      
+      allData <- colTable(data, c(1:6))
       
-      # zeby zadzialalo poprawnie akcja mapa-tabelka (kartogram i zaznaczanie na mapie) MUSIMY rozdzielic obserwowanie passedMap.. na dwa
-      # oddzielne observe - inaczej nie zadziala do konca dobrze - to jest sposob generalnie na rozdzielanie roznych akcji gdy uzywamy 
-      # drawTolbara i na nim korzystamy z jakiegos przycisku (np. draw) ktory jest wspoldzielony przez rozne przyciski!
-      
-      ########################################
       
       observe({
         polygon_coords(passedMapInput())
@@ -117,11 +91,8 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         choro_coords(passedMapInputShape())
       })
       
-      
-      # bierzemy te punkty z mod_mapAnalysis zeby dzieki temy moc poprawnie filtrowac tabele zaznaczjac punkty na mapie. Buttony te ustawiaja
-      # zawsze input$.. (akcja z mapy) na NULL, dzieki temu przy przechodzeniu miedzy buttonami (analysisPanel) zawsze zeruja (NULL) sie koordynaty
-      # kliiniete (choropleth)/ zaznaczone (draw) na mapie
-      
+
+      # buttons passed from mod_mapAnalysis
       observeEvent(btnDrawRectangle(), {
         
         polygon_coords(NULL)
@@ -134,11 +105,19 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         polygon_coords(NULL)
         choro_coords(NULL)
         
-      })         
-      
-      #######################################
+      })   
       
       
+      observeEvent(btnDrawHeatMap(), {
+        
+        polygon_coords(NULL)
+        choro_coords(NULL)
+        
+      })  
+      
+
+      
+      # selected points/choropleth on a map retuned as reactive
       commonPointsChoro <- reactive({
         
         if (is.null(choro_coords())) return()
@@ -164,8 +143,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
       
 
       
-      # df filtered by points selected on a map (this reactive df is passed to table as data)
-
+      # df filtered by points selected on a map (this reactive df is passed to table as final data)
       reactiveDfTransits <- reactive({
 
         if (!is.null(polygon_coords()) ) { 
@@ -191,7 +169,6 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
       }) 
  
 
-  
       toListen <- reactive({
         list(reactiveDfTransits()[selectedRowTransits(),], 
              reactiveDfDrivers()[selectedRowDrivers(),])
@@ -201,59 +178,39 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
       # tables for boxes
       output$tableTransits <- reactable::renderReactable({
         reactable::reactable(
-          #data = dataMainRowsTransits,
           data = reactiveDfTransits(),
-          #reactiveDf(),
           searchable = TRUE,
           pagination = FALSE,
           highlight = TRUE,
           compact = TRUE,
           height = 400,
-          width = 310, #bylo 330
+          width =  280,
           selection = "multiple", 
           onClick = "select",
           groupBy = "transitNr",
-          
-          
-          # details = function(index){
-          #   #extraData <- subset(dataTableTransits, dataTableTransits[[1]] == dataTableMainRows[[1]][index])[detailsLevel+1]
-          #   extraData <- subset(dataTableTransits, dataTableTransits[[1]] == dataMainRowsTransits[[1]][index])[2]
-          #   htmltools::div(style = "padding: 16px; color: black;",
-          #                  reactable::reactable(extraData, outlined = TRUE)
-          #                 )
-          # },
-          
-          
-          
           columns = list(
             transitNr = reactable::colDef(
               style = list(fontSize = 14),
               width = 140
             ),
-            #LP = reactable::colDef(
             orderNr = reactable::colDef(
-              width = 160, #bylo 180
-              cell = function(value, index) {
-                
-                stops <- reactiveDfTransits()$customerName[index]
-                transitType <- reactiveDfDrivers()$transitTypeShort[index]
-                
-                if (transitType == "D") {
-                  classCSS <- "delivery"
+              width = 90,
+              style = list(
+                fontWeight = 300,
+                fontSize = 14
+              )
+            ),
+            transitTypeShort = reactable::colDef(width = 40,
+              style = function(value) { 
+                if (value == "P") {
+                    color <- "#DC143C"
                 } else {
-                  classCSS <- "pickup"
+                    color <- "#20B2AA"
                 }
-                
-                info_tag <- div(style = list(float = "right"), span(class = classCSS, transitType)) #podmienic na to gdy dane z sql
-                #info_tag <- div(style = list(float = "left"), span(class = classCSS, transitType))
-                tagList(
-                  div(style = list(fontWeight = 600), value, info_tag),
-                  div(style = list(fontSize = 12), stops)
-                )
+                list(color = color, fontWeight = "bold", fontSize = 14)
               }
             ),
             customerName = reactable::colDef(show = FALSE),
-            orderNr = reactable::colDef(show = FALSE),
             transitTypeShort = reactable::colDef(show = FALSE),
             geometry = reactable::colDef(show = FALSE)
           ),
@@ -263,8 +220,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
             highlightColor =  "#2e2d30",
             borderColor = "gray",
             searchInputStyle = list(width = 165,backgroundColor = "#343a40", border = "1px solid gray"),
-            rowSelectedStyle = list(backgroundColor = "#222d38", boxShadow = "inset 2px 0 0 0 #151a1f")#,
-            #rowHighlightStyle = list(width = "370px")
+            rowSelectedStyle = list(backgroundColor = "#222d38", boxShadow = "inset 2px 0 0 0 #151a1f")
           )         
           
         )
@@ -279,44 +235,40 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
           highlight = TRUE,
           compact = TRUE,
           height = 400,
-          width = 370,
+          width = 360,
           selection = "multiple", 
           onClick = "select",
           groupBy = "driverName",
-          
           columns = list(
-            #Kierowca = reactable::colDef(
             driverName = reactable::colDef(
               style = list(fontSize = 14),
-              width = 200
+              width = 180
             ),
-
             orderNr = reactable::colDef(
-              width = 165,
-              cell = function(value, index) {
-                #stops <- reactiveDfDrivers()$nazwaOdbiorcyNadawcy[index]
-                distance <- reactiveDfDrivers()$distanceKm[index]
-                transitType <- reactiveDfDrivers()$transitTypeShort[index]
-                
-                if (transitType == "D") {
-                  classCSS <- "delivery"
+              width = 90,
+              style = list(
+                fontWeight = 300,
+                fontSize = 14
+              )
+            ),
+            distanceKm = reactable::colDef(
+              width = 80,
+              cell = function(value) {  
+                paste0(value, " km")
+              },
+              style = function(value) {
+                if (value >= 1) {
+                  color <- "#DC143C"
                 } else {
-                  classCSS <- "pickup"
+                  color <- "#20B2AA"
                 }
-                
-                info_tag <- div(style = list(float = "right"), span(class = classCSS, transitType)) #podmienic na to gdy dane z sql
-                #info_tag <- div(style = list(float = "left"), span(class = classCSS, transitType))
-                tagList(
-                  div(style = list(fontWeight = 600), value, info_tag),
-                  div(style = list(fontSize = 12), paste("distance:", distance, " km"))
-                )
+                list(color = color, fontWeight = 500, fontSize = 14)
               }
             ),
             customerName = reactable::colDef(show = FALSE),
             transitTypeShort = reactable::colDef(show = FALSE),
             geometry = reactable::colDef(show = FALSE)
           ),
-          
           theme = reactable::reactableTheme(
             backgroundColor = "#343a40",
             highlightColor =  "#2e2d30",
@@ -329,11 +281,10 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
       
       
       
-      
       # show/hide points on a map based on row clicked
       observeEvent(toListen(), {
         
-        popIcons <- leaflet.extras::pulseIcons(color = "#007bff",heartbeat = 0.8)
+        popIcons <- leaflet.extras::pulseIcons(color = "#007bff", heartbeat = 0.8)
         
         lenSelectedTransits <- length(selectedRowTransits())
         lenPrevSelectedTransits <- length(prevSelectedTransits())
@@ -353,14 +304,14 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         
         
         if (lenSelectedTransits > lenPrevSelectedTransits ) {
+          
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
             leaflet.extras::addPulseMarkers(
               data = reactiveDfTransits()[selectedRowTransits(),],
               group = "points",
               layerId = layerClickedTransits,
-              icon = popIcons
-            )
-
+              icon = popIcons) %>% 
+            leaflet::flyTo(19.145136, 51.919438, zoom = 7)
           
         } else if (lenSelectedTransits < lenPrevSelectedTransits) {
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
@@ -369,13 +320,14 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         
         
         if (lenSelectedDrivers > lenPrevSelectedDrivers ) {
+          
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
             leaflet.extras::addPulseMarkers(
               data = reactiveDfDrivers()[selectedRowDrivers(),],
               group = "points",
               layerId = layerClickedDrivers,
-              icon = popIcons
-            )
+              icon = popIcons) %>% 
+            leaflet::flyTo(19.145136, 51.919438, zoom = 7)
           
         } else if (lenSelectedDrivers < lenPrevSelectedDrivers) {
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
@@ -387,82 +339,80 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         
       }) 
       
+ 
       
-      
-      # draw buttons - boxes: zakomentowane bo bylo uzywane do buttona w boxie na gorze (rysowanie obszaru na mapie)
-      
-      # observeEvent(input$btnDrawAreaTransits, {
-      #   
-      #   if (visibilityDraw$showHide) {
-      #     
-      #     visibilityDraw$showHide = !visibilityDraw$showHide
-      #     #print(polygon_coords())
-      #     polygon_coords(NULL) # here we have to clear up coordinates every time drawing is
-      #     
-      #     shinyjs::runjs(
-      #       htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-      #                        var cancel = elementsCancel.item(0); 
-      #                        cancel.firstElementChild.click();   
-      #       
-      #                        document.querySelector(".leaflet-draw-edit-remove").click();       
-      #                        var elements = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-      #                        var clearAll = elements.item(2); 
-      #                        clearAll.firstElementChild.click();' ))  
-      #     
-      #     #reactable::updateReactable("tableTransits", data = reactiveDf())
-      #     
-      #   } else {
-      #     
-      #     visibilityDraw$showHide = !visibilityDraw$showHide
-      #     
-      # 
-      #     #print(polygon_coords())
-      #     shinyjs::runjs(
-      #       htmltools::HTML('document.querySelector(".leaflet-draw-draw-rectangle").click();'))
-      #     
-      #   }
-      # })
-      # 
-      # 
-      # 
-      # observeEvent(input$btnDrawAreaDrivers, {
-      #   
-      #   if (visibilityDraw$showHide) {
-      #     
-      #     visibilityDraw$showHide = !visibilityDraw$showHide
-      #     
-      #     polygon_coords(NULL)
-      #     
-      #     shinyjs::runjs(
-      #       htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-      #                        var cancel = elementsCancel.item(0);
-      #                        cancel.firstElementChild.click();
-      # 
-      #                        document.querySelector(".leaflet-draw-edit-remove").click();
-      #                        var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-      #                        var clearAll = elementsClearAll.item(2);
-      #                        clearAll.firstElementChild.click();' ))
-      #     
-      #   } else {
-      #     
-      #     visibilityDraw$showHide = !visibilityDraw$showHide
-      #     
-      #     shinyjs::runjs(
-      #       htmltools::HTML('document.querySelector(".leaflet-draw-draw-rectangle").click();'))
-      #     
-      #   }
-      # })  
-      
-      
-      
-      
-      # this retyrn must be at the end to return value and make other components working
-      # jak przekazac reactiveExpr z tego modulu do np. mod_analysis? czy mozna przekazac reactiveExpr czy same inputy np. input$btn?
+      # create excel report           
+      output$downloadExcel <- downloadHandler(
+        
+        rows <- nrow(data),
+        
+        filename = function() {
+          "All_data_report.xlsx"
+        },
+        content = function(file) {
+          my_workbook <- openxlsx::createWorkbook()
+          
+          openxlsx::addWorksheet(
+            wb = my_workbook,
+            sheetName = "Transit_data"
+          )
+          
+          openxlsx::setColWidths(
+            my_workbook,
+            1,
+            cols = 1:16,
+            widths = c(12, 12, 15, 15, 12, 12, 12, 15, 15, 15, 17, 15, 15, 15, 12, 10)
+          )
+          
+          openxlsx::writeData(
+            my_workbook,
+            sheet = 1,
+            c(
+              "Transits & Drivers report - all data"
+            ),
+            startRow = 1,
+            startCol = 1
+          )
 
+          openxlsx::addStyle(
+            my_workbook,
+            sheet = 1,
+            style = openxlsx::createStyle(
+              fontSize = 18,
+              textDecoration = "bold",
+              fontColour = "#2d349c"
+            ),
+            rows = 1,
+            cols = 1:6
+          )
+          
+          openxlsx::writeData(
+            my_workbook,
+            sheet = 1,
+            data[1:rows,1:16],
+            startRow = 3,
+            startCol = 1
+          )
+          
+          openxlsx::addStyle(
+            my_workbook,
+            sheet = 1,
+            style = openxlsx::createStyle(
+              fgFill = "#151a59",
+              halign = "center",
+              fontColour = "#ffffff"
+            ),
+            rows = 3,
+            cols = 1:16,
+            gridExpand = TRUE
+          )
 
+          openxlsx::showGridLines(my_workbook, 1, showGridLines = FALSE)
+          openxlsx::saveWorkbook(my_workbook, file)
+        }
 
-      
-      
+      )
+
     }
   )}
 

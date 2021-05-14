@@ -9,28 +9,19 @@ app_ui <- function(request) {
   tagList(
 
     golem_add_external_resources(),
-
+    waiter::use_waiter(),
+    waiter::use_steward(colors = c("#58088a","#ab60d6", "#0b2d52","#87b8ed")),
+    waiter::waiter_preloader(html = tagList(waiter::spin_flower(), HTML(paste(tags$span(style="font-size:17px;letter-spacing: 1.5px","Loading"), tags$span(style="font-size:17px;font-weight:600", "geoMapX..."), sep = " ")))),
     
     bs4Dash::dashboardPage(
       
+      fullscreen = TRUE,
       
-      # preloader = list(
-      #   waiter = list(html = tagList(waiter::spin_1(), "Loading ..."), color = "#343a40"),
-      #   duration = 5
-      # ),
-
-        
        mod_header_ui("header_ui"),
-        
        mod_sidebar_ui("sidebar_ui"),
-    
        mod_body_ui("body_ui")
-       
-       
-       #mod_dashboard_ui("dashboard_ui")
-  
 
-  )
+    )
   )
 
 }
