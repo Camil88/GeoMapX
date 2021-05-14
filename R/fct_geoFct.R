@@ -11,8 +11,6 @@ coordCustomers <- function(data, type) {
     
 }
 
-
-
 coordApplication <- function(data, type) {
   
   df <- data %>%
