@@ -20,10 +20,8 @@ app_ui <- function(request) {
        mod_header_ui("header_ui"),
        mod_sidebar_ui("sidebar_ui"),
        mod_body_ui("body_ui")
-
     )
   )
-
 }
 
 #' Add external Resources to the Application
