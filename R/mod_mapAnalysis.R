@@ -26,7 +26,6 @@ mod_mapAnalysis_ui <- function(id){
                                   tagList(shinyWidgets::actionBttn(inputId = ns("btnAnl1"), label = NULL, style = "material-circle", size = "sm", icon = icon("vector-square")),
                                           shinyWidgets::actionBttn(inputId = ns("btnAnl2"), label = NULL, style = "material-circle", size = "sm", icon = icon("map")),
                                           shinyWidgets::actionBttn(inputId = ns("btnAnl3"), label = NULL, style = "material-circle", size = "sm", icon = icon("fire")))))
-
   )
 }
 
@@ -62,7 +61,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
         }
       )
       
-
       commonPointsChoro <- reactive({
 
         if (is.null(choro_coords())) return()
@@ -74,7 +72,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
         returnCommonPoints
       })
        
-
       commonPoints <- reactive({        
         rbind_coords <- do.call(rbind,lapply(polygon_coords(),function(x){c(x[[1]][1],x[[2]][1])}))
         polygon_object <- sf::st_polygon(list(rbind_coords))
@@ -84,7 +81,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
       })  
       
       
-    
       # SELECTING AREA ON A MAP
 
       # main data for a table and chart
@@ -103,7 +99,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
              '2' = chartStats(dataStats[commonPointsChoro(),], "driverName","transitNr", "countAllOrders")
         )
       })
-
 
       output$plot <- echarts4r::renderEcharts4r({
         
@@ -132,8 +127,7 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             trigger = "axis"
             )        
       })
-
-      
+    
       output$tableStats <- reactable::renderReactable ({       
         reactable::reactable(
           data = dataTableStats(),
@@ -185,9 +179,7 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
           )
         )
       })      
-      
-    
-      
+            
       clearDrawJS <- 'var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
                       var cancel = elementsCancel.item(0);
                       cancel.firstElementChild.click();
@@ -197,8 +189,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
                       var clearAll = elementsClearAll.item(2);
                       clearAll.firstElementChild.click();'
       
-      
-
       observeEvent(input$btnAnl1, {
 
         buttonNumber$number = 1
@@ -232,8 +222,7 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             htmltools::HTML('document.querySelector(".leaflet-draw-draw-rectangle").click();'))
         }
       })
-      
-        
+              
       observeEvent(input$btnAnl2, {
         
         buttonNumber$number = 2
@@ -273,11 +262,9 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
                 opacity = 0.8,
                 fillOpacity = 0.5,
                 bringToFront = TRUE)
-            )
-          
+            )          
           shinyjs::runjs(
-            htmltools::HTML(clearDrawJS))           
-         
+            htmltools::HTML(clearDrawJS))                    
           }
       }) 
       
@@ -315,17 +302,14 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             htmltools::HTML(clearDrawJS)                  
         }   
       })
-      
-              
+                  
       # buttons returned to mod_boxTable
       return( list(
         btnDrawRectangle = reactive({input$btnAnl1}),
         btnDrawChoro = reactive({input$btnAnl2}),
         btnDrawHeat = reactive({input$btnAnl3})
-      ))
-           
-    }
-    
+      ))           
+    }    
   )
 }
  
