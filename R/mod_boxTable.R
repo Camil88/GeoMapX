@@ -96,8 +96,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         polygon_coords(NULL)
         choro_coords(NULL)       
       })   
-      
-      
+            
       observeEvent(btnDrawHeatMap(), {        
         polygon_coords(NULL)
         choro_coords(NULL)       
