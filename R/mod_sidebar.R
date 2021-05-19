@@ -48,7 +48,6 @@ mod_sidebar_ui <- function(id){
         style = "margin: auto",
       )
     )
-
   )
 }
     
@@ -61,7 +60,6 @@ mod_sidebar_server <- function(id){
     id,
     function(input, output, session) {
       ns <- NS(id)
-
       
       observeEvent(input$refresh, {
         showNotification(
@@ -73,15 +71,12 @@ mod_sidebar_server <- function(id){
         )
       })   
       
-
       return(
         list(
           btnAnalysis = reactive({input$btnAnalysis}),
           sidebarDashboard = reactive({input$sidebar})
         )
       )
-      
-
     })
 }
 
