@@ -30,12 +30,8 @@ app_server <- function( input, output, session ) {
   data_app <- func_FilterDate(df_dateFormat, dateFrom, dateTo)
   colnames(data_app)[1] <- "transitNr"
   
-
-
   mod_header_server("header_ui")
   sidebarMod <- mod_sidebar_server("sidebar_ui")
   mod_body_server("body_ui", data_app, btnAnalysis = sidebarMod$btnAnalysis, sidebarDashboard = sidebarMod$sidebarDashboard)
-
-
   
 }
