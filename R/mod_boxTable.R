@@ -21,8 +21,7 @@ mod_boxTable_ui <- function(id){
                          collapsible = TRUE,
                          reactable::reactableOutput(ns("tableTransits"))
                        )
-      ),
-      
+      ),      
       bs4Dash::tabItem(tabName = "drivers",
                        bs4Dash::box(
                          title = "Drivers",
@@ -31,8 +30,7 @@ mod_boxTable_ui <- function(id){
                          collapsible = TRUE,
                          reactable::reactableOutput(ns("tableDrivers"))
                        )
-      ),      
-      
+      ),            
       bs4Dash::tabItem(tabName = "reports",
                        bs4Dash::box(
                          title = "Reports",
@@ -42,10 +40,8 @@ mod_boxTable_ui <- function(id){
                          collapsible = FALSE,
                          downloadButton(ns("downloadExcel"), icon = icon("file-export"), "Generate .xlsx report")
                        )
-      )      
-      
-    )
-    
+      )            
+    )   
   )
 }
 
@@ -81,8 +77,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
       dataTableTransits <- colTable(data, c(1,2,4,6))
       dataTableDrivers <- colTable(data, c(2,3,4,6,13))      
       allData <- colTable(data, c(1:6))
-      
-      
+            
       observe({
         polygon_coords(passedMapInput())
       })
@@ -91,32 +86,23 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         choro_coords(passedMapInputShape())
       })
       
-
       # buttons passed from mod_mapAnalysis
-      observeEvent(btnDrawRectangle(), {
-        
+      observeEvent(btnDrawRectangle(), {        
         polygon_coords(NULL)
-        choro_coords(NULL)
-        
+        choro_coords(NULL)        
       })
       
-      observeEvent(btnDrawChoro(), {
-        
+      observeEvent(btnDrawChoro(), {      
         polygon_coords(NULL)
-        choro_coords(NULL)
-        
+        choro_coords(NULL)       
       })   
       
       
-      observeEvent(btnDrawHeatMap(), {
-        
+      observeEvent(btnDrawHeatMap(), {        
         polygon_coords(NULL)
-        choro_coords(NULL)
-        
+        choro_coords(NULL)       
       })  
-      
-
-      
+            
       # selected points/choropleth on a map retuned as reactive
       commonPointsChoro <- reactive({
         
@@ -127,22 +113,17 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         
         #returnCommonPoints <- dataTableTransits[df,]
         returnCommonPoints <- allData[df,]
-        returnCommonPoints
-        
+        returnCommonPoints        
       })    
       
 
-      commonPoints <- reactive({
-        
+      commonPoints <- reactive({        
         rbind_coords <- do.call(rbind,lapply(polygon_coords(),function(x){c(x[[1]][1],x[[2]][1])}))
         polygon_object <- sf::st_polygon(list(rbind_coords))
         returnCommonPoints <- allData[polygon_object,] 
-        returnCommonPoints
-        
+        returnCommonPoints        
       })        
-      
-
-      
+           
       # df filtered by points selected on a map (this reactive df is passed to table as final data)
       reactiveDfTransits <- reactive({
 
@@ -153,10 +134,8 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         } else {
           newDf <- dataTableTransits
         }
-
       })
-
-          
+        
       reactiveDfDrivers <- reactive({
         
         if (!is.null(polygon_coords()) ) { 
@@ -168,13 +147,11 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         }
       }) 
  
-
       toListen <- reactive({
         list(reactiveDfTransits()[selectedRowTransits(),], 
              reactiveDfDrivers()[selectedRowDrivers(),])
       })
-      
-      
+            
       # tables for boxes
       output$tableTransits <- reactable::renderReactable({
         reactable::reactable(
@@ -213,8 +190,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
             customerName = reactable::colDef(show = FALSE),
             transitTypeShort = reactable::colDef(show = FALSE),
             geometry = reactable::colDef(show = FALSE)
-          ),
-          
+          ),          
           theme = reactable::reactableTheme(
             backgroundColor = "#343a40",
             highlightColor =  "#2e2d30",
@@ -225,8 +201,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
           
         )
       })
-      
-      
+            
       output$tableDrivers <- reactable::renderReactable({
         reactable::reactable(
           data = reactiveDfDrivers(),
@@ -278,9 +253,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
           )                             
         )
       })
-      
-      
-      
+           
       # show/hide points on a map based on row clicked
       observeEvent(toListen(), {
         
@@ -301,8 +274,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
           layerToHideTransits <- subset(prevSelectedTransits(), prevSelectedTransits() %notin% selectedRowTransits() )
           layerToHideDrivers <- subset(prevSelectedDrivers(), prevSelectedDrivers() %notin% selectedRowDrivers() )
         }
-        
-        
+                
         if (lenSelectedTransits > lenPrevSelectedTransits ) {
           
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
@@ -317,8 +289,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
             leaflet::removeMarker(layerToHideTransits)
         }
-        
-        
+                
         if (lenSelectedDrivers > lenPrevSelectedDrivers ) {
           
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
@@ -332,11 +303,9 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
         } else if (lenSelectedDrivers < lenPrevSelectedDrivers) {
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
             leaflet::removeMarker(layerToHideDrivers)
-        }        
-        
+        }                
         prevSelectedTransits(selectedRowTransits())
-        prevSelectedDrivers(selectedRowDrivers())
-        
+        prevSelectedDrivers(selectedRowDrivers())        
       }) 
       
  
@@ -410,9 +379,7 @@ mod_boxTable_server <- function(id, data, passedMap, passedMapInput, passedMapIn
           openxlsx::showGridLines(my_workbook, 1, showGridLines = FALSE)
           openxlsx::saveWorkbook(my_workbook, file)
         }
-
       )
-
     }
   )}
 
