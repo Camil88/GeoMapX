@@ -30,11 +30,9 @@ mod_body_server <- function(id, data, btnAnalysis, sidebarDashboard){
     function(input, output, session) {
       ns <- NS(id)
       
-
        mod_dashboard_server("dashboard", data)
        mod_spatialOperations_server("proxyMap", data)
-
-        
+       
        observeEvent(btnAnalysis(), {
         shinyjs::toggle(id = "proxyMap-analysis-analysisPanel",
                         anim = TRUE,
@@ -42,9 +40,8 @@ mod_body_server <- function(id, data, btnAnalysis, sidebarDashboard){
                         time = 0.4)
        })
       
-       
-      observe({
-        
+      
+      observe({        
           if(sidebarDashboard() == "dashboard") {
             shinyjs::hide(id = "proxyMap-map", anim = TRUE, animType = "fade", time = 0.3)
             shinyjs::hide(id = "proxyMap-coordPanel", anim = TRUE, animType = "fade", time = 0.3)
