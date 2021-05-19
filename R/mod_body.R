@@ -62,9 +62,7 @@ mod_body_server <- function(id, data, btnAnalysis, sidebarDashboard){
                                $('#panelTransits, #panelDrivers, #panelReports').show();
                                $('#sidebar_ui-btnAnalysis').prop('disabled', false);")) 
           }
-
       })
-
 })
 }
     
