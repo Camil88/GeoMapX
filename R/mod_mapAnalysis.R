@@ -31,7 +31,6 @@ mod_mapAnalysis_ui <- function(id){
 }
 
 
-
 #' @noRd 
 mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMapInputShape, parentSession) {
   moduleServer(
