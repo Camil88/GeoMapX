@@ -37,8 +37,7 @@ mod_dashboard_ui <- function(id){
                   rightBorder = TRUE,
                   marginBottom = FALSE
                 )
-            ),
-            
+            ),           
               column(
                 width = 6,
                 bs4Dash::descriptionBlock(
@@ -52,8 +51,7 @@ mod_dashboard_ui <- function(id){
                 )
               )
             )
-          ),
-          
+          ),         
           bs4Dash::infoBox(
             tabName = "divisionKmShortest",
             title = tags$span(style="color:#337fd4","Division with the shortest distance from customer to app coordinates"),
@@ -61,8 +59,7 @@ mod_dashboard_ui <- function(id){
             width = 12,
             color = "success",
             icon = icon("route")
-          ),
-          
+          ),          
           bs4Dash::infoBox(
             tabName = "divisionKmLongest",
             title = tags$span(style="color:#337fd4","Division with the longest distance from customer to app coordinates"),
@@ -71,8 +68,7 @@ mod_dashboard_ui <- function(id){
             color = "danger",
             icon = icon("route")
           )
-        ),
-        
+        ),        
         column(
           width = 4, 
           bs4Dash::box(
@@ -84,8 +80,7 @@ mod_dashboard_ui <- function(id){
             collapsible = FALSE,
             echarts4r::echarts4rOutput(ns("plot2"), height = "100%")
           )
-        ),
-        
+        ),        
         column(
           width = 4, 
           bs4Dash::box(
@@ -98,8 +93,7 @@ mod_dashboard_ui <- function(id){
             echarts4r::echarts4rOutput(ns("plot3"), height = "100%")
           )
         )        
-      ),
-     
+      ),     
       fluidRow(
         column(
           width = 4,
@@ -122,8 +116,7 @@ mod_dashboard_ui <- function(id){
                   rightBorder = TRUE,
                   marginBottom = FALSE
                 )
-              ),
-              
+              ),             
               column(
                 width = 6,
                 bs4Dash::descriptionBlock(
@@ -137,8 +130,7 @@ mod_dashboard_ui <- function(id){
                 )
               )
             )
-          ),
-          
+          ),          
           bs4Dash::infoBox(
             tabName = "driverKmShortest",
             title = tags$span(style="color:#337fd4","Driver with the shortest distance from customer to app coordinates"),
@@ -146,8 +138,7 @@ mod_dashboard_ui <- function(id){
             width = 12,
             color = "success",
             icon = icon("route")
-          ),
-          
+          ),          
           bs4Dash::infoBox(
             tabName = "driverKmLongest",
             title = tags$span(style="color:#337fd4","Driver with the longest distance from customer to app coordinates"),
@@ -156,22 +147,17 @@ mod_dashboard_ui <- function(id){
             color = "danger",
             icon = icon("route")
           )
-        ),
-        
+        ),       
         column(
           width = 8, 
-          reactable::reactableOutput(ns("tableAllData"))
-          
+          reactable::reactableOutput(ns("tableAllData"))         
         )
-      )      
-    
+      )          
     )
-
     )
   )
 }
     
-
 
 #' @noRd 
 mod_dashboard_server <- function(id, data)
@@ -203,7 +189,6 @@ mod_dashboard_server <- function(id, data)
       worstDriverKm <- statsKmWorst(dataStats, "driverName", "distanceKm" )
       worstDivisionKm <- statsKmWorst(dataStats, "DivisionCity", "distanceKm" )      
       
-
       # outputs - panels with statistics
       output$bestDivisionRatio <- renderText(
         bestDivision$ratio
@@ -228,8 +213,7 @@ mod_dashboard_server <- function(id, data)
       output$worstDivisionName <- renderText(
         worstDivision$DivisionCity
       )      
-      
-      
+           
       output$bestDriverRatio <- renderText(
         bestDriver$ratio
       )
@@ -241,8 +225,7 @@ mod_dashboard_server <- function(id, data)
       output$bestDriverName <- renderText(
         bestDriver$driverName
       )
-      
-      
+            
       output$worstDriverRatio <- renderText(
         worstDriver$ratio
       )
@@ -254,8 +237,7 @@ mod_dashboard_server <- function(id, data)
       output$worstDriverName <- renderText(
         worstDriver$driverName
       )        
-      
- 
+       
       output$bestDriverKm <- renderText(
         paste("<font color=\"#28a745\"><b>", bestDriverKm$distanceKm," km   ","</b></font>",bestDriverKm$driverName)
       )
@@ -271,10 +253,8 @@ mod_dashboard_server <- function(id, data)
       output$worstDivisionKm <- renderText(
         paste("<font color=\"#dc3545\"><b>", worstDivisionKm$distanceKm, " km ", "</b></font>",worstDivisionKm$DivisionCity)
       )
-      
-    
-      output$plot2 <- echarts4r::renderEcharts4r({
-        
+         
+      output$plot2 <- echarts4r::renderEcharts4r({        
         dataPlot1 %>% 
           echarts4r::e_charts(DivisionCity) %>% 
           echarts4r::e_pie(Orders, radius = c("45%", "80%")) %>% 
@@ -287,13 +267,10 @@ mod_dashboard_server <- function(id, data)
             formatter = echarts4r::e_tooltip_pie_formatter(
               style = c("percent")
             )
-          )
-        
+          )        
       })      
       
-
-      output$plot3 <- echarts4r::renderEcharts4r({
-        
+      output$plot3 <- echarts4r::renderEcharts4r({       
         dataPlot3 %>% 
           echarts4r::e_charts(statusHrsMin) %>% 
           echarts4r::e_area(Orders) %>% 
@@ -303,13 +280,11 @@ mod_dashboard_server <- function(id, data)
           echarts4r::e_grid(height = "60%") %>% 
           echarts4r::e_tooltip(
             trigger = "axis"
-          )
-        
+          )       
       })      
   
       
-      output$plot4 <- echarts4r::renderEcharts4r({
-        
+      output$plot4 <- echarts4r::renderEcharts4r({       
         dataPlot4 %>% 
           echarts4r::e_charts(statusHrsMin) %>% 
           echarts4r::e_area(Orders) %>% 
@@ -319,11 +294,9 @@ mod_dashboard_server <- function(id, data)
           echarts4r::e_grid(height = "60%") %>% 
           echarts4r::e_tooltip(
             trigger = "axis"
-          )
-        
+          )        
       })      
-      
-      
+           
       output$tableAllData <- reactable::renderReactable({
         reactable::reactable(
           data = dataTableAllData,
@@ -354,8 +327,7 @@ mod_dashboard_server <- function(id, data)
             statusGreater1km = reactable::colDef(name = "> 1 km",align = "center", width = 70),
             statusSerialSet = reactable::colDef(name = "Serial set",align = "center", width = 70),
             geometry = reactable::colDef(show = FALSE)
-          ),
-          
+          ),          
           theme = reactable::reactableTheme(
             color = "#f2f2f2",
             backgroundColor = "#292828",
@@ -375,8 +347,7 @@ mod_dashboard_server <- function(id, data)
               )
           )         
         )
-      })     
-      
+      })           
     }
 )
 
