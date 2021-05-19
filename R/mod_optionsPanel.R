@@ -25,40 +25,6 @@ mod_optionsPanel_server <- function(id) {
     id,
     function(input, output, session) {
       ns <- NS(id)  
-  
-      
-      visibilitySearch <- reactiveValues(showHide = FALSE)
-      visibilityLayers <- reactiveValues(showHide = FALSE)
-
-      
-      observeEvent(input$btnOpt1, {
-
-        shinyjs::runjs(
-          htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(2); 
-                             cancel.firstElementChild.click();  
-            
-                             document.querySelector(".leaflet-draw-edit-remove").click(); 
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();' ))         
-      })
-      
-      
-      
-      observeEvent(input$btnOpt3, {
-        
-        shinyjs::runjs(
-          htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(2); 
-                             cancel.firstElementChild.click();  
-            
-                             document.querySelector(".leaflet-draw-edit-remove").click(); 
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();' ))         
-      })      
-      
 
       
       shinyjs::delay(300,
