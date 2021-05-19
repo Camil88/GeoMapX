@@ -192,10 +192,20 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             
           )
         )
-
       })      
       
     
+      
+      clearDrawJS <- 'var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
+                      var cancel = elementsCancel.item(0);
+                      cancel.firstElementChild.click();
+
+                      document.querySelector(".leaflet-draw-edit-remove").click();
+                      var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
+                      var clearAll = elementsClearAll.item(2);
+                      clearAll.firstElementChild.click();'
+      
+      
 
       observeEvent(input$btnAnl1, {
 
@@ -218,38 +228,22 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
           leaf_map %>% leaflet::flyTo(19.145136, 51.919438, zoom = 7)
           
           shinyjs::runjs(
-            htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(0);
-                             cancel.firstElementChild.click();
-
-                             document.querySelector(".leaflet-draw-edit-remove").click();
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();' ))
+            htmltools::HTML(clearDrawJS))
 
         } else {
 
           visibilityMapRectangles$showHide = !visibilityMapRectangles$showHide
 
           shinyjs::runjs(
-            htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(0);
-                             cancel.firstElementChild.click();
-
-                             document.querySelector(".leaflet-draw-edit-remove").click();
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();'))
+            htmltools::HTML(clearDrawJS))
 
           shinyjs::runjs(
             htmltools::HTML('document.querySelector(".leaflet-draw-draw-rectangle").click();'))
 
         }
-
       })
       
-
-         
+        
       observeEvent(input$btnAnl2, {
         
         buttonNumber$number = 2
@@ -264,19 +258,10 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
           leaflet::leafletProxy(mapId = passedMap, session = parentSession) %>%
             leaflet::clearGroup("districts") %>% 
             leaflet::flyTo(19.145136, 51.919438, zoom = 7)
-          
-          
+                    
           shinyjs::runjs(
-            htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(0); 
-                             cancel.firstElementChild.click();  
-            
-                             document.querySelector(".leaflet-draw-edit-remove").click(); 
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();' ))               
-          
-          
+            htmltools::HTML(clearDrawJS))               
+                    
         } else {
           
           visibilityMapDistrict$showHide = !visibilityMapDistrict$showHide  
@@ -301,21 +286,12 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             )
           
           shinyjs::runjs(
-            htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(0); 
-                             cancel.firstElementChild.click();  
-            
-                             document.querySelector(".leaflet-draw-edit-remove").click(); 
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();' ))           
+            htmltools::HTML(clearDrawJS))           
          
           }
       }) 
       
-      
-      
-      
+          
       observeEvent(input$btnAnl3, {
         
         buttonNumber$number = 3
@@ -342,26 +318,16 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
               group = "heat",
               intensity = ~orderNr,
               blur = 35,
-              radius = 27
-              
+              radius = 27             
             )
           
           shinyjs::runjs(
-            htmltools::HTML('var elementsCancel = document.getElementsByClassName("leaflet-draw-actions")[0].children;
-                             var cancel = elementsCancel.item(0); 
-                             cancel.firstElementChild.click();  
-            
-                             document.querySelector(".leaflet-draw-edit-remove").click(); 
-                             var elementsClearAll = document.getElementsByClassName("leaflet-draw-actions")[1].children;
-                             var clearAll = elementsClearAll.item(2);
-                             clearAll.firstElementChild.click();' ))   
-                
+            htmltools::HTML(clearDrawJS)                  
         }   
       })
       
    
-      
-      
+            
       # buttons returned to mod_boxTable
       return( list(
         btnDrawRectangle = reactive({input$btnAnl1}),
