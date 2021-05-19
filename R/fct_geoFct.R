@@ -2,23 +2,19 @@
 # CREATE POINTS FOR DATA SUBSETS
 
 coordCustomers <- function(data, type) {
-
     df <- data %>%
       dplyr::filter(transitType == type) %>% 
       sf::st_as_sf(coords = c("lonCust","latCust"), crs = 4326)
 
-  return(df)
-    
+  return(df)    
 }
 
-coordApplication <- function(data, type) {
-  
+coordApplication <- function(data, type) {  
   df <- data %>%
     dplyr::filter(transitType %in% type) %>% 
     sf::st_as_sf(coords = c("lonApp","latApp"), crs = 4326)
   
-  return(df)
-  
+  return(df)  
 }
 
 
@@ -40,8 +36,7 @@ createLines <- function(data, type) {
 
   sf = sf::st_sf(df,geometry = geomLines)
   
-  return(sf)
-  
+  return(sf)  
 }
 
 
