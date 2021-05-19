@@ -47,8 +47,6 @@ mod_spatialOperations_server <- function(id, data){
       mod_boxTable_server("boxTable", data, "map", reactive({input$map_draw_new_feature$geometry$coordinates[[1]]}), 
                           reactive({input$map_shape_click}), session, drawnShape$btnDrawRectangle, drawnShape$btnDrawChoro, drawnShape$btnDrawHeat)
       
-
-
       # Visibility - coords panel (buttons logic)
       visibilityReceipt <- reactiveValues(showHide = FALSE)
       visibilityDelivery <- reactiveValues(showHide = TRUE)
@@ -69,9 +67,7 @@ mod_spatialOperations_server <- function(id, data){
                          "background-color" = "#343a40",
                          "font-size" = "11px",
                          "border-style" = "none")     
-      
-      
-    
+          
       # MAIN MAP
       output$map <- leaflet::renderLeaflet({
         leaflet::leaflet(coordAppALL,
@@ -81,20 +77,17 @@ mod_spatialOperations_server <- function(id, data){
             style = "mapbox://styles/mapbox/light-v10",
             setView = FALSE,
             group = "Light"
-          ) %>%
-          
+          ) %>%          
           leaflet.mapboxgl::addMapboxGL(
             style = "mapbox://styles/mapbox/streets-v11",
             setView = FALSE,
             group = "Streets"
-          ) %>%
-          
+          ) %>%         
           leaflet.mapboxgl::addMapboxGL(
             style = "mapbox://styles/hwl/ckmuuqnqm5cgl17nn4soev09l",
             setView = FALSE,
             group = "Dark"
           ) %>%
-
           leaflet::addCircleMarkers(
             data = coordCustDelivery,
             group = "custDelivery",
@@ -105,8 +98,7 @@ mod_spatialOperations_server <- function(id, data){
             label = lapply(createLabel(coordCustDelivery), htmltools::HTML),
             labelOptions = leaflet::labelOptions(
               style = labelStyle)
-          ) %>% 
-          
+          ) %>%           
           leaflet::addCircleMarkers(
             data = coordAppDelivery,
             group = "appDelivery",
@@ -117,8 +109,7 @@ mod_spatialOperations_server <- function(id, data){
             label = lapply(createLabel(coordAppDelivery), htmltools::HTML),
             labelOptions = leaflet::labelOptions(
               style = labelStyle)
-          ) %>% 
-          
+          ) %>%           
           leaflet::addPolylines(
             data = linesDelivery,
             group = "linesDelivery",
@@ -126,26 +117,22 @@ mod_spatialOperations_server <- function(id, data){
             stroke = TRUE,
             weight = 1,
             color = "#6b747d"
-          ) %>% 
-          
+          ) %>%           
           leaflet.extras::addDrawToolbar(
             circleOptions = FALSE,
             markerOptions = FALSE,
             singleFeature = TRUE, 
             editOptions = leaflet.extras::editToolbarOptions()
           ) %>% 
-
           leaflet.extras::addSearchOSM(
             options = leaflet.extras::searchOptions(
               minLength = 2,
               hideMarkerOnCollapse = TRUE)
-          ) %>%
-          
+          ) %>%          
           leaflet::addLayersControl(
             baseGroups = c("Light", "Streets", "Dark"), 
             options = leaflet::layersControlOptions(collapsed = FALSE)
           )
-
       })   
 
       
@@ -189,8 +176,7 @@ mod_spatialOperations_server <- function(id, data){
               label = lapply(createLabel(coordCustReceipt), htmltools::HTML),
               labelOptions = leaflet::labelOptions(
                 style = labelStyle)
-            ) %>%
-            
+            ) %>%            
             leaflet::addCircleMarkers(
               data = coordAppReceipt,
               group = "appReceipt",
@@ -201,8 +187,7 @@ mod_spatialOperations_server <- function(id, data){
               label = lapply(createLabel(coordAppReceipt), htmltools::HTML),
               labelOptions = leaflet::labelOptions(
                 style = labelStyle)
-            ) %>% 
-            
+            ) %>%             
             leaflet::addPolylines(
               data = linesReceipt,
               group = "linesReceipt",
@@ -211,7 +196,6 @@ mod_spatialOperations_server <- function(id, data){
               weight = 1,
               color = "#6b747d"
             ) 
-
         }
       })
       
@@ -242,10 +226,8 @@ mod_spatialOperations_server <- function(id, data){
             leaflet::clearGroup("appReceipt") %>%
             leaflet::clearGroup("custReceipt") %>% 
             leaflet::clearGroup("linesReceipt") %>% 
-            leaflet::clearGroup("appALL")
-          
-        }
-        
+            leaflet::clearGroup("appALL")          
+        }        
       })       
       
       
@@ -287,9 +269,9 @@ mod_spatialOperations_server <- function(id, data){
                 stroke = TRUE,
                 weight = 1,
                 color = "#6b747d"
-              )                
-            
+              )                            
           }
+            
         } else if (visibilityDelivery$showHide) {
           
           if (visibilityAppDelivery$showHide) {
@@ -306,8 +288,7 @@ mod_spatialOperations_server <- function(id, data){
 
             leaflet::leafletProxy("map") %>%
               leaflet::showGroup("appDelivery") %>% 
-              leaflet::showGroup("linesDelivery")
-            
+              leaflet::showGroup("linesDelivery")            
           }
           
         } else if (visibilityDelivery$showHide == FALSE & visibilityReceipt$showHide == FALSE) {
