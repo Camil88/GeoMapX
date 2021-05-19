@@ -9,8 +9,7 @@
 #' @importFrom shiny NS tagList 
 mod_header_ui <- function(id){
   ns <- NS(id)
-  
-  
+   
   header = bs4Dash::dashboardHeader(
     
     title = actionButton(ns("btnBurger"), NULL, icon = icon("bars")),
@@ -25,18 +24,15 @@ mod_header_ui <- function(id){
         bs4Dash::notificationItem(icon = icon("draw-polygon"),
                                   status = "info",
                                   "Julius Craig entered Customer_234"
-        ),
-        
+        ),        
         bs4Dash::notificationItem(icon = icon("draw-polygon"),
                                    status = "info",
                                   "Adrian Baker entered Customer_22"
-        ),
-        
+        ),        
         bs4Dash::notificationItem(icon = icon("draw-polygon"),
                                   status = "info",
                                   "John Cain entered Customer_119"
-        ),
-        
+        ),       
         bs4Dash::notificationItem(icon = icon("draw-polygon"),
                                   status = "info",
                                   "Nick Carr entered Customer_38"
@@ -63,18 +59,13 @@ mod_header_ui <- function(id){
                                time = "1 hr 22 mins ago"),
           bs4Dash::messageItem("Message from driver Allen Barton",
                                "Customer closed, not responding",
-                               time = "1 hr 38 mins ago")
-      
+                               time = "1 hr 38 mins ago")      
           ),
-
-        bs4Dash::userOutput(ns("user"))
-    
+        bs4Dash::userOutput(ns("user"))   
       )    
     )
-
 }
     
-
 #' header Server Function
 #'
 #' @noRd 
@@ -94,7 +85,6 @@ mod_header_server <- function(id){
           subtitle = "welcome to the app!"
         )
       })
-
     })
 }
 
