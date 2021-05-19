@@ -27,7 +27,6 @@ mod_mapAnalysis_ui <- function(id){
                                           shinyWidgets::actionBttn(inputId = ns("btnAnl2"), label = NULL, style = "material-circle", size = "sm", icon = icon("map")),
                                           shinyWidgets::actionBttn(inputId = ns("btnAnl3"), label = NULL, style = "material-circle", size = "sm", icon = icon("fire")))))
 
-
   )
 }
 
@@ -39,8 +38,7 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
     id,
     function(input, output, session) {
       ns <- NS(id)
-      
-  
+        
       visibilityMapRectangles <- reactiveValues(showHide = FALSE)
       visibilityMapDistrict <- reactiveValues(showHide = FALSE)
       visibilityHeatMap <- reactiveValues(showHide = FALSE)
@@ -78,8 +76,7 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
       })
        
 
-      commonPoints <- reactive({
-        
+      commonPoints <- reactive({        
         rbind_coords <- do.call(rbind,lapply(polygon_coords(),function(x){c(x[[1]][1],x[[2]][1])}))
         polygon_object <- sf::st_polygon(list(rbind_coords))
         returnCommonPoints <- dataStats[polygon_object,]
@@ -134,13 +131,11 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
           echarts4r::e_x_axis(axisLabel = list(show = chart_label)) %>% 
           echarts4r::e_tooltip(
             trigger = "axis"
-            )
-         
+            )        
       })
 
       
-      output$tableStats <- reactable::renderReactable ({
-        
+      output$tableStats <- reactable::renderReactable ({       
         reactable::reactable(
           data = dataTableStats(),
           searchable = FALSE,
@@ -182,14 +177,12 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             ),
             countAllOrders = reactable::colDef(show = FALSE),
             countOrders = reactable::colDef(show = FALSE)
-          ),
-          
+          ),         
           theme = reactable::reactableTheme(
             backgroundColor = "#343a40",
             headerStyle = list(fontSize = 14, color = '#0089d9'),
             borderColor = "#0089d9",
-            borderWidth = 1
-            
+            borderWidth = 1           
           )
         )
       })      
@@ -220,7 +213,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
           leaflet::clearGroup("districts") %>%
           leaflet::clearGroup("heat")           
 
-
         if (visibilityMapRectangles$showHide) {
 
           visibilityMapRectangles$showHide = !visibilityMapRectangles$showHide
@@ -239,7 +231,6 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
 
           shinyjs::runjs(
             htmltools::HTML('document.querySelector(".leaflet-draw-draw-rectangle").click();'))
-
         }
       })
       
@@ -326,17 +317,15 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
         }   
       })
       
-   
-            
+              
       # buttons returned to mod_boxTable
       return( list(
         btnDrawRectangle = reactive({input$btnAnl1}),
         btnDrawChoro = reactive({input$btnAnl2}),
         btnDrawHeat = reactive({input$btnAnl3})
       ))
-      
-      
-}
+           
+    }
     
   )
 }
