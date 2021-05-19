@@ -1,10 +1,8 @@
 
 # FUNCTIONS FOR USE IN DASHBOARD/CONTROLBAR ANALYSES
 
-
 # stats used in a table (controlbar)
-tableStats <- function(data, colName1, colName2, colName3, colName4, colName5) {
-  
+tableStats <- function(data, colName1, colName2, colName3, colName4, colName5) {  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]]) %>%
@@ -18,10 +16,8 @@ tableStats <- function(data, colName1, colName2, colName3, colName4, colName5) {
   return(result)
 }
 
-
 # stats used in charts (controlbar)
-chartStats <- function(data, colName1, colName2, colName3) {
-  
+chartStats <- function(data, colName1, colName2, colName3) {  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]], .data[[colName3]]) %>%
@@ -33,11 +29,8 @@ chartStats <- function(data, colName1, colName2, colName3) {
   return(result)
 }
 
-
-
 # stats used in dashboard mod
-chartStatsBestDriver <- function(data, colName1, colName2) {
-  
+chartStatsBestDriver <- function(data, colName1, colName2) { 
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]]) %>%
@@ -55,8 +48,7 @@ chartStatsBestDriver <- function(data, colName1, colName2) {
 
 
 # stats used in dashboard mod
-chartStatsWorstDriver <- function(data, colName1, colName2) {
-  
+chartStatsWorstDriver <- function(data, colName1, colName2) {  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]]) %>%
@@ -72,10 +64,8 @@ chartStatsWorstDriver <- function(data, colName1, colName2) {
   return(result)
 }
 
-
 # stats used in dashboard mod
-chartStatsBestDivision <- function(data, colName1, colName2, colName3) {
-  
+chartStatsBestDivision <- function(data, colName1, colName2, colName3) {  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]], .data[[colName3]]) %>%
@@ -94,10 +84,8 @@ chartStatsBestDivision <- function(data, colName1, colName2, colName3) {
   return(result)
 }
 
-
 # stats used in dashboard mod
-chartStatsWorstDivision <- function(data, colName1, colName2, colName3) {
-  
+chartStatsWorstDivision <- function(data, colName1, colName2, colName3) {  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(.data[[colName1]], .data[[colName2]], .data[[colName3]]) %>%
@@ -115,11 +103,9 @@ chartStatsWorstDivision <- function(data, colName1, colName2, colName3) {
   
   return(result)
 }
-
 
 # stats used in dashboard mod
 statsKmBest <- function(data, colName1, colName2) {
-  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::select(.data[[colName1]], .data[[colName2]]) %>% 
@@ -132,10 +118,8 @@ statsKmBest <- function(data, colName1, colName2) {
   return(result)
 }
 
-
 # stats used in dashboard mod
-statsKmWorst <- function(data, colName1, colName2) {
-  
+statsKmWorst <- function(data, colName1, colName2) {  
   result <- data %>%
     sf::st_drop_geometry() %>%
     dplyr::select(.data[[colName1]], .data[[colName2]]) %>% 
