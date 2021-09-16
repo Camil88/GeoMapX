@@ -299,7 +299,7 @@ mod_mapAnalysis_server <- function(id, data, passedMap, passedMapInput, passedMa
             )
           
           shinyjs::runjs(
-            htmltools::HTML(clearDrawJS)                  
+            htmltools::HTML(clearDrawJS))                  
         }   
       })
                   
