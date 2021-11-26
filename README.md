@@ -1,4 +1,4 @@
-                                                           GeoMapX
+                                     GeoMapX
 
 Application is available here: https://kghwl.shinyapps.io/GeoMapXApp/
 
