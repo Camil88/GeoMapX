@@ -2,7 +2,7 @@
   <img width="200" src="https://user-images.githubusercontent.com/57962280/145387319-a1e0f0bf-5e42-4293-8307-82c35154845d.png" >
 </p>
 
-🔥 Application is available here: https://kghwl.shinyapps.io/GeoMapXApp/
+🔥 Application, created for <a href='https://www.rstudio.com/blog/time-to-shiny/'>Shiny Contest 2021</a>, is available here: https://kghwl.shinyapps.io/GeoMapXApp/
 
 ➡️**Abstract**: GeoMapX is the Shiny application which serves to visualize coordinates on a map and to perform spatial analysis. You can easily toggle between coordinates of deliveries or pickups, select areas on a map and more. The app is based on logistitcs industry.
 
