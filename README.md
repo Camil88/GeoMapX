@@ -2,6 +2,7 @@
   <img width="200" src="https://user-images.githubusercontent.com/57962280/145387319-a1e0f0bf-5e42-4293-8307-82c35154845d.png" >
 </p>
 
+
 🔥 GeoMapX was awarded Honorable Mention in global <a href='https://www.rstudio.com/blog/time-to-shiny/'>Shiny Contest 2021</a>. Application is available here: https://kghwl.shinyapps.io/GeoMapXApp/.  
 
 
