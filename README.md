@@ -40,7 +40,9 @@ You can toggle between deliveries/pickups using blue buttons on the left- bottom
 
 - buttons on the right pane (search & map layers). You can search for any address on a map or change map layer.
 
-## 3. Author
+## 3. Authors
 Kamil Glowka
+
+GitHub: https://github.com/Camil88
 
 GitHub: https://github.com/Camil88
