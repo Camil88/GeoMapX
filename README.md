@@ -44,5 +44,3 @@ You can toggle between deliveries/pickups using blue buttons on the left- bottom
 Kamil Glowka
 
 GitHub: https://github.com/Camil88
-
-GitHub: https://github.com/Camil88
