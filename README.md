@@ -3,7 +3,7 @@
 </p>
 
 
-🔥 GeoMapX was awarded Honorable Mention in global <a href='https://www.rstudio.com/blog/time-to-shiny/'>Shiny Contest 2021</a>. Application is available here: https://kghwl.shinyapps.io/GeoMapXApp/.  
+🔥 GeoMapX was awarded Honorable Mention in global <a href='https://www.rstudio.com/blog/time-to-shiny/'>Shiny Contest 2021</a>. Application is available under <a href="https://kghwl.shinyapps.io/GeoMapXApp/">this link</a>.  
 
 
 ## 1. Abstract
